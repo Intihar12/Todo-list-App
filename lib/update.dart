@@ -70,13 +70,18 @@ SqlLiteData? handler;
                         controller:  passwordcontroller,
                         decoration: InputDecoration(
                             hintText: 'pasword',
-                            labelText: 'password'
+                            labelText: 'password',
+
                         ),
                       ),
 
                       TextButton(onPressed: (){
-Navigator.push(context, MaterialPageRoute(builder: (context)=>showdata(name: namecontroller.text,email:  emailcontroller.text,password:  passwordcontroller.text,)));
-                        handler!.updatedata(namecontroller.text, emailcontroller.text, passwordcontroller.text, snapshot.data![index].id!.toString());
+/*Navigator.push(context, MaterialPageRoute(builder: (context)=>showdata(
+  name: namecontroller.text,email:  emailcontroller.text,password:  passwordcontroller.text,)));*/
+
+
+                        handler!.updatedata(
+                            namecontroller.text, emailcontroller.text, passwordcontroller.text, snapshot.data![index].id!);
 
                       },
 

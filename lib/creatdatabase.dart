@@ -19,7 +19,7 @@ class SqlLiteData{
     );
   }
 
-  Future<String?> insertuser(User user)async{
+  Future<int?> insertuser(User user)async{
     final Database db = await initializeDB();
    await db.insert('users', user.toMap());
   }
@@ -40,9 +40,9 @@ return list.map((e) => User.fromMap(e)).toList();
     final Database db = await initializeDB();
     await db.rawDelete('DELETE FROM users WHERE id=? ',[id]);
   }
-  void updatedata(String name, String email, String password, String id )async{
+  void updatedata(String name, String email, String password, int id )async{
     final Database db=await initializeDB();
 
-    db.rawUpdate('Update users SET name = ? , email = ? , password = ?, id = ?', [name, email,password, id]);
+    db.rawUpdate('UPDATE users SET name = ? , email = ? , password = ?  WHERE id = ?', [name, email,password, id]);
   }
 }
