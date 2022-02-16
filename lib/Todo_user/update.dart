@@ -56,20 +56,20 @@ SqlLiteData? handler;
                       TextField(
                         controller:  namecontroller,
                         decoration: InputDecoration(
-                            hintText: 'name',
-                            labelText: 'name'
+                            hintText: snapshot.data![index].name,
+                           // labelText:  snapshot.data![index].name
                         ),),
                       TextField(
                         controller: emailcontroller,
                         decoration: InputDecoration(
-                            hintText: 'email',
-                            labelText: 'email'
+                           hintText: snapshot.data![index].email,
+                           // labelText: snapshot.data![index].email,
                         ),),
                       TextField(
                         controller:  passwordcontroller,
                         decoration: InputDecoration(
-                            hintText: 'pasword',
-                            labelText: 'password',
+                            hintText: snapshot.data![index].password,
+                           // labelText: snapshot.data![index].password,
 
                         ),
                       ),
@@ -77,10 +77,12 @@ SqlLiteData? handler;
                       TextButton(onPressed: (){
 /*Navigator.push(context, MaterialPageRoute(builder: (context)=>showdata(
   name: namecontroller.text,email:  emailcontroller.text,password:  passwordcontroller.text,)));*/
+setState(() {
+  handler!.updatedata(
+      namecontroller.text, emailcontroller.text, passwordcontroller.text, snapshot.data![index].id!);
 
+}); //Navigator.of(context).pop();
 
-                        handler!.updatedata(
-                            namecontroller.text, emailcontroller.text, passwordcontroller.text, snapshot.data![index].id!);
 
                       },
 

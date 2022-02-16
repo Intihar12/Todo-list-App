@@ -75,9 +75,13 @@ controller: emailcontroller,
                 ),
         TextButton(
             onPressed: ()async{
-          User Myuser = User(name: namecontroller.text, email: emailcontroller.text, password: passwordcontroller.text);
-             await  handler!.insertuser(Myuser);
-print('output .. ${namecontroller.text}');
+
+
+                User Myuser = User(name: namecontroller.text, email: emailcontroller.text, password: passwordcontroller.text);
+                await  handler!.insertuser(Myuser);
+                print('output .. ${namecontroller.text}');
+
+
         }, child: Text("submit")),
 
                 TextButton(onPressed: (){

@@ -60,8 +60,10 @@ SizedBox(height: 10,),
             children: [
 
               TextButton(onPressed: (){
+setState(() {
+  handler!.deletedata(snapshot.data![index].id ?? 0);
+});
 
-                handler!.deletedata(snapshot.data![index].id ?? 0);
               }, child: Text('Delete')),
 
               TextButton(onPressed: (){

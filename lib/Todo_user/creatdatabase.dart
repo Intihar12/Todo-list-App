@@ -12,7 +12,8 @@ class SqlLiteData{
     return openDatabase(
       join(path, 'users.db'),
       onCreate: (database, version) async {
-        await database.execute("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)",
+        await database.execute
+          ("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)",
         );
       },
       version: 1,
