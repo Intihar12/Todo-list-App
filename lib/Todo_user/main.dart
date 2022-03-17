@@ -1,3 +1,6 @@
+import 'dart:isolate';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_app/Todo_list/todo_list.dart';
@@ -7,11 +10,20 @@ import 'package:sqflite_app/my_Todo/maiin.dart';
 import 'package:authentication/intuu.dart';
 import 'package:sqflite_app/splentodo/maiiin.dart';
 
-void main(){runApp(MaterialApp(
+void main() async{
+
+
+  runApp(MaterialApp(
+
+
     debugShowCheckedModeBanner: false,
   home: MyApp()
 
-));}
+),);
+
+
+
+}
 
 class  MyApp extends StatelessWidget {
   const  MyApp({Key? key}) : super(key: key);
@@ -39,8 +51,10 @@ class  MyApp extends StatelessWidget {
 
 
               TextButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>intuuapp()));
-              }, child: Text("SplenTodo "))
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>intuuapp(listtodo: '',)));
+              }, child: Text("SplenTodo ")),
+
+
             ],
           ),
         ),

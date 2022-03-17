@@ -1,16 +1,26 @@
 
 
+import 'listclass.dart';
+
 class Textclass{
   int? id;
   final String texts;
-  final DateTime dateTime;
+final String? dateTime;
+// final listclass? listtodo;
+final String? time;
+ // final DateTime dateTime;
+  final String? listtodo;
 
-  Textclass({ this.id, required this.texts,required this.dateTime});
+  // Textclass({ this.id, required this.texts,  this.listtodo});
+  Textclass({ this.id, required this.texts, this.listtodo, this.dateTime, this.time});
 
   Textclass.fromMap(Map<String, dynamic>res):
         id= res ['id'],
         texts= res['texts'],
-         dateTime =res ['creationDates']
+        dateTime =res ['creationDates'],
+  time=res['creationTime'],
+  listtodo=res['listtodo']
+
 
          ;
 
@@ -18,7 +28,9 @@ class Textclass{
     return {
       'id':id,
       'texts':texts,
-      'creationDates':dateTime.toString()
+     'creationDates':dateTime.toString(),
+      'creationTime': time.toString(),
+         'listtodo':listtodo
     };
 
   }
@@ -26,21 +38,4 @@ class Textclass{
 
 
 
-/*class DateTime implements Comparable<DateTime> {
-  // Weekday constants that are returned by [weekday] method:
-  static const int monday = 1;
-  static const int tuesday = 2;
-  static const int wednesday = 3;
-  static const int thursday = 4;
-  static const int friday = 5;
-  static const int saturday = 6;
-  static const int sunday = 7;
-  static const int daysPerWeek = 7;
 
-  @override
-  int compareTo(DateTime other) {
-    // TODO: implement compareTo
-    throw UnimplementedError();
-  }
-
-}*/

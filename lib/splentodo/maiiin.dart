@@ -1,22 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sqflite/sqflite.dart';
+
 import 'package:sqflite_app/my_Todo/db/db_provider.dart';
 import 'package:sqflite_app/splentodo/newtask.dart';
 
 import 'modals/classtask.dart';
 import 'modals/database.dart';
+import 'modals/listclass.dart';
 
-void main(){runApp(intuuapp(),);}
+void main(){runApp(mypage(),);}
+
+class mypage extends StatelessWidget {
+  const mypage({Key? key, }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: intuuapp(listtodo: '',),
+    );
+  }
+}
+
+
+
 
 class intuuapp extends StatefulWidget {
-  const intuuapp({Key? key}) : super(key: key);
+  const intuuapp({Key? key,required  this.listtodo }) : super(key: key);
 
+  final String listtodo;
+ //final String listtodo;
   @override
   _intuuappState createState() => _intuuappState();
 }
 
 class _intuuappState extends State<intuuapp> {
+
+  final _formKey = GlobalKey<FormState>();
   final focus = FocusNode();
 late  VoidCallback? press;
   TextEditingController inputcontroller= TextEditingController();
@@ -25,42 +46,71 @@ late  VoidCallback? press;
   Color btncolor = Color(0xFFff955b);
   Color editcolor = Color(0xFF4044cc);
   String newTasktexts ="";
+  Database? database;
+
+//Future<List<Textclass>>? searchusers;
+
+TodoHandlers? handler;
+
+  //databaseclasshandlar? handlers;
+
+
+  Future<List<Textclass>>? searchusers;
 
 
 
-TodoHandler? handler;
+  void _runFilter(String enteredKeyword) {
+   //Future<List<Textclass>> results ;
+   //List<Map<String, dynamic>> results = [];
+   /* if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      // results = handler!.getdata() as List<Map<String, dynamic>> ;
+    } else {
+
+      // results = handler!.getdata()
+      //     .then((seplando) =>
+      //     seplando.texts.toString().toLowerCase().contains(enteredKeyword.toLowerCase())) as List<Map<String, dynamic>>;
+      // we use the toLowerCase() method to make it case-insensitive
+    }*/
+
+    // Refresh the UI
+    setState(() {
+      searchusers = handler!.getSearchData(enteredKeyword);
+    });
+  }
 
 
-@override
+
+  @override
 void initState() {
   // TODO: implement initState
   super.initState();
 
-  handler= TodoHandler.dataBase;
+print("back???");
 
-  handler!.initDatabase().whenComplete(() async{
+
+  handler= TodoHandlers.dataBases;
+
+  handler!.initDatabases().whenComplete(() async{
     setState(() {
 //TodoHandler.dataBase.gettask();
-    });
-  });
-  handler!.database.whenComplete(() async{
-    setState(() {
+
+      searchusers = handler!.getdata();
 
     });
   });
+
 }
 
 
-  getTasks()async{
-    final tasks=await TodoHandlers.dataBases.gettask();
-    print(tasks);
-    return tasks;
-  }
+
 
   Icon actionIcon = new Icon(Icons.search);
-  Widget appBarTitle = new Text("Todo List");
+  Widget appBarTitle = new Text("All List");
   String dropdownValue = 'Delete';
 
+  String listtodo = "";
+String texts = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +119,7 @@ void initState() {
         child: FloatingActionButton(
 backgroundColor: Colors.white,
           onPressed: (){
-           Navigator.push(context, MaterialPageRoute(builder: (context)=> newtask(texts: dropdownValue,dateTime: dropdownValue,)));
+           Navigator.push(context, MaterialPageRoute(builder: (context)=> newtask(texts: texts, listtodo: listtodo,)));
           },child: Icon(Icons.add, color: Colors.black,),
         ),
       ),
@@ -79,21 +129,47 @@ backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title:appBarTitle,
+
+
         leading: IconButton(onPressed:(){
 
-        },icon: Icon (Icons.done),
+        },
+          icon: Icon (Icons.done),
 
         ),
+
+
+
 
       //  title: Text('All listis'),
         automaticallyImplyLeading: false,
       actions: [
+
+
+
+
         IconButton(icon: actionIcon,
             onPressed: (){
+
+              if(this.actionIcon.icon == Icons.close){
+                setState(() {
+                  searchusers = handler!.getdata();
+                });
+              }
+
+          print(this.actionIcon.icon);
               setState(() {
 
                 if ( this.actionIcon.icon == Icons.search){
-                  this.actionIcon = new Icon(Icons.close);
+                 this.actionIcon = new Icon(Icons.close);
+
+                 if(this.actionIcon == Icons.close){
+
+                   setState(() {
+                     searchusers = handler!.getdata();
+                   });
+                 }
+
                   this.appBarTitle = new TextField(
                     style: new TextStyle(
                       color: Colors.black,
@@ -101,37 +177,23 @@ backgroundColor: Colors.white,
                     ),
                     decoration: new InputDecoration(
 
-                        prefixIcon: new Icon(Icons.search,color: Colors.white),
+                       // prefixIcon: new Icon(Icons.search,color: Colors.white),
                         hintText: "Search...",
                         hintStyle: new TextStyle(color: Colors.black)
                     ),
+
+                   onChanged: (value) => _runFilter(value),
+
                   );}
                 else {
-                  this.actionIcon = new Icon(Icons.search);
+                   this.actionIcon = new Icon(Icons.search);
                   this.appBarTitle = new Text("Todo List");
                 }
+
 
               });
             }, //icon: Icon(Icons.search,),
         ),
-
-/*Drawer(
-
-),
-  */
-       /* DropdownButton(
-
-            items: <String>['Delete', 'Share', 'Edit', ].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (_) {},
-            icon: const Icon(Icons.more_vert),
-
-        //}, icon: Icon(Icons.more_vert))
-          )*/
 
 
     IconButton(onPressed: (){
@@ -153,35 +215,63 @@ backgroundColor: Colors.white,
         children: [
 
           Expanded(
-            child: FutureBuilder<dynamic>(
-              future: getTasks(),
-              builder: (_, taskData){
-                switch (taskData.connectionState){
+            child: FutureBuilder(
+             // future: getTasks(),
+
+              future: searchusers,//handler!.getdata(),
+              // builder: (_, taskData)
+                builder: (BuildContext context,AsyncSnapshot <List<Textclass>> snapshot)       {
+                switch (snapshot.connectionState){
                   case ConnectionState.waiting:
                     {
                       return Center(child:  CircularProgressIndicator(),);
                     }
                   case ConnectionState.done:
                     {
-                      if(taskData.data != null){
+
+                      print("snapshot.data");
+                      print(snapshot.data);
+
+                      if(snapshot.data != null){
+
                         return Padding(
                           padding: EdgeInsets.all(8.0),
-                          child:  ListView.builder(
-                              itemCount: taskData.data.length,
-                              itemBuilder: (context , index){
+                          child:  ListView.builder (
+                              itemCount: snapshot.data!.length,
+                              // itemCount: 0,
+                              itemBuilder: (BuildContext context ,int index){
+                                String task = snapshot.data![index].texts.toString();
+                                String list = (snapshot.data![index].listtodo == null) ? "" : snapshot.data![index].listtodo.toString();
+                           //     String day = DateFormat('yyyy-MMMM-dd   hh:mm a').format(DateTime.now());
+                              //  String day = snapshot.data![index].dateTime;
+                                String times= (snapshot.data![index].time == null) ? "" : snapshot.data![index].time.toString();
+                                String day= (snapshot.data![index].dateTime == null) ? "" : snapshot.data![index].dateTime.toString();
 
 
-                                //  Text( taskData.data![index]['task'].toString())
+                                return Dismissible(
 
-                                String task= taskData.data[index]['texts'].toString();
+                                    direction: DismissDirection.endToStart,
+                                    background: Container(
+                                      //color: secondcolor,
 
-                            //    String day = DateTime.now().toString();
-                             //  String day = DateFormat('hh:mm a').format(DateTime.now());
-                                String days = DateFormat('yyyy-MMMM-dd   hh:mm a').format(DateTime.now());
+                                       color: Colors.red,
+                                     alignment: Alignment.centerRight,
+                                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                      child: Icon(Icons.delete_forever, color: Colors.white,),
+                                    ),
+
+                                    key: ValueKey<int>(snapshot.data![index].id!),
+                                    onDismissed: (DismissDirection direction) async {
+                                      await this.handler!.deletedata(snapshot.data![index].id!);
+                                      setState(() {
+                                        snapshot.data!.remove(snapshot.data![index]);
+                                      });
+                                    },
+
 
                                 //  DateTime.jm().format(DateTime("hh:mm:ss").parse("14:15:00"))
 
-                                return Card(
+                                child:  Card(
                                   color: secondcolor,
 
                                   child: InkWell (
@@ -191,48 +281,64 @@ backgroundColor: Colors.white,
                     Navigator.push(
                     context,
                     MaterialPageRoute(
-                    builder: (context) => newtask(texts: taskData.data[index]['id'].toString(), dateTime: days, ),
+                    builder: (context) => newtask(texts: snapshot.data![index].id.toString(),
+                      listtodo: snapshot.data![index].id.toString(), ),
+                     // listtodo: snapshot.data![index].id.toString(), dateTime: days, ),
                     ),);},
                                     child: Container(
-                                      margin: EdgeInsets.only(right: 12.0),
+
+                                      margin: EdgeInsets.only(right: 5.0),
                                       padding: EdgeInsets.all(12.0),
                                       decoration: BoxDecoration(
                                         //color:  Colors.red,
                                         borderRadius: BorderRadius.circular(8.0),
                                       ),
+
+
                                       child: Column(
 
                                         children:[
 
+
                                           Text(
-                                            task, style: TextStyle(fontSize: 20, color: Colors.white),),
+                                            task,
+
+                                            style: TextStyle(fontSize: 20, color: Colors.white),),
                                               SizedBox(height: 5,),
-                                          /*   Text(day, style: TextStyle(
-                                                    color: Colors.teal, fontSize: 10.0, fontWeight: FontWeight.bold),),*/
-                                          Text(days, style: TextStyle(
-                                              color: Colors.teal, fontSize: 10.0, fontWeight: FontWeight.bold),),
+
+                                          Text(list,
+                                              style: TextStyle(color: Colors.white)),
+
+
+                                            Text(day, style: TextStyle(
+                                                    color: Colors.teal, fontSize: 10.0, fontWeight: FontWeight.bold),),
+
+                                         Text(times,style: TextStyle(
+                                              color: Colors.teal, fontSize: 10.0, fontWeight: FontWeight.bold),)
 
                                               ]
                                               ),
+
                                     ),
+
                                   ),
+                                )
                                 );
 
-                                /* String task= snapshot.data![index].task.toString();
-                           String day = DateTime.parse(snapshot.data![index]["creationData"]).day.toString();
-*/
                               }
+
                           ),
                         );
-                      }else{
-                        return Center(child: Text('you have no task today', style: TextStyle(color: Colors.white),),);
                       }
+                        return Center(child: Text('you have no task today', style: TextStyle(color: Colors.white),),);
+
                     }
                 }
                 return Center(child: CircularProgressIndicator(),);
               },
-            ),),
-         // ElevatedButton.icon(onPressed: (){},icon: Icon(Icons.add), label: Text(''), ),
+            ),
+          ),
+
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),
 
@@ -245,42 +351,76 @@ backgroundColor: Colors.white,
             ),
 
 
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    textInputAction: TextInputAction.next,
-                    controller: inputcontroller,
-                    decoration: InputDecoration(filled: true,
-                      hintText: 'type a new task',
-                      fillColor: Colors.white,
+            child: Form(
+              key: _formKey,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
 
-                      // focusedBorder: InputBorder.none
-                    ),
+                      textInputAction: TextInputAction.next,
+                      controller: inputcontroller,
+                      decoration: InputDecoration(filled: true,
+                        hintText: 'type a new task',
+                        fillColor: Colors.white,
 
+                        // focusedBorder: InputBorder.none
+                      ),
 
-                  ),),
-                SizedBox(width: 15.0,),
+    validator: (value) {
+    if (value == null || value.isEmpty) {
+    return 'Please enter some text';
+    }
 
-                TextButton.icon(
-                    style:  TextButton.styleFrom(backgroundColor: btncolor, shape: StadiumBorder(), ),
-                    onPressed: (){
-                      setState(() {
-                        newTasktexts= inputcontroller.text.toString();
-
-                        inputcontroller.text="";
-                      });
-                      Textclass newtaskst = Textclass(texts: newTasktexts, dateTime: DateTime.now(), );
-
-                      TodoHandlers.dataBases.addNewtask(newtaskst);
-                    },
-
-                    label: Text('Add task',style: TextStyle(color: Colors.white),),
-                    icon: Icon(Icons.add, color: Colors.white,)),
+    return null;
+    },
 
 
 
-              ],),
+                    ),),
+                  SizedBox(width: 15.0,),
+
+                  TextButton.icon(
+                      style:  TextButton.styleFrom(backgroundColor: btncolor, shape: StadiumBorder(), ),
+                      onPressed: (){
+
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        newTasktexts= inputcontroller.text.toString();
+
+        inputcontroller.text="";
+/*
+        Textclass newtaskst = Textclass(texts: newTasktexts, dateTime: DateFormat('yyyy-MMMM-dd   hh:mm a').format(DateTime.now()), );
+*/
+        Textclass newtaskst = Textclass(texts: newTasktexts, );
+
+        TodoHandlers.dataBases.insertdata(  newtaskst );
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Processing Data')),
+    );}
+
+
+
+                       //Textclass newtaskst = Textclass(texts: newTasktexts, dateTime: DateTime.now() );
+
+
+
+
+
+                       print("i am here ${newTasktexts}, ${DateTime.now()}");
+                      },
+
+
+
+                      label: Text('Add task',style: TextStyle(color: Colors.white),),
+                      icon: Icon(Icons.add, color: Colors.white,)),
+
+
+
+                ],),
+            ),
 
 
           ),
@@ -290,4 +430,7 @@ backgroundColor: Colors.white,
 
     );
   }
+
 }
+
+
