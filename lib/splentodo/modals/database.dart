@@ -25,7 +25,7 @@ static const _databaseName = 'ContactData.db';
 
   initDatabases()async{
     Directory getDatabasesPath = await getApplicationDocumentsDirectory();
-    print('datag directory:  ${ getDatabasesPath.path}');
+    print('data directory:  ${ getDatabasesPath.path}');
     return await openDatabase(
         join(await getDatabasesPath.path, _databaseName),
         onCreate: (db,  version)async{
@@ -60,42 +60,6 @@ return result;
   }
 
 
-  Future<dynamic> gettask()async{
-    final db= await initDatabases();
-    var res= await db.query("seplando");
-    if(res.length == 0){
-      return [];
-    }else{
-      var resultMap = res.toList();
-      return resultMap.isNotEmpty ? resultMap : Null;
-    }}
-
-    Future<dynamic> retriveuser(String id)async {
-      final db = await initDatabases();
-      var res = await db.rawQuery('SELECT * FROM seplando WHERE id =? ', [id]);
-      if (res.length == 0) {
-        return [];
-      } else {
-        var resultMap = res.toList();
-        return resultMap.isNotEmpty ? resultMap : Null;
-      }
-    }
-   Future <dynamic>  updatetextss(String texts,  int id , String selectedlistitems )async {
-        final db = await initDatabases();
-        var res = await db.rawUpdate(
-            ' UPDATE seplando SET texts = ? , listtodo = ?  WHERE id =? ', [texts,selectedlistitems, id]);
-
-      //  print("selectedlistitems = " + selectedlistitems);
-       // print("res.length = " + res.length.toString());
-
-        if (res.length == 0) {
-          return [];
-        } else {
-          var resultMap = res.toList();
-          return resultMap.isNotEmpty ? resultMap : Null;
-        }
-      }
-
  void  updatetexts(String texts,  int id, String selectedlistitems ,String selectedDate ,String _selectedTime)async {
     final db = await initDatabases();
      db.rawUpdate(' UPDATE seplando SET texts = ? , listtodo = ? ,creationDates = ?, creationTime = ? WHERE id =? ', [texts,selectedlistitems, selectedDate, _selectedTime, id,  ]);
@@ -112,7 +76,6 @@ return result;
 
 
         //KSDFJKDJFDK
-
 
   Future<List<Textclass>> getdata()async{
     final db= await initDatabases();
@@ -152,25 +115,6 @@ Future<List<Textclass>> getSearchData(String search)async{
     final db = await initDatabases();
     final  List<Map<String, Object?>> list=await db.rawQuery('SELECT * FROM seplando WHERE id =? ', [id]);
     return list.map((e) => Textclass.fromMap(e)).toList();
-  }
-
-
-
-
-  Future<List<listclass>> gettasks()async{
-    final db= await initDatabases();
-   // var res= await db.query("todolist");
-
-    final List<Map<String, Object?>> listusers= await db.query('todolist');
-    return listusers.map((e) => listclass.fromMap(e)).toList();
-
-    }
-
-
-  Future<List<listclass>> retriveuserss(String id)async {
-    final db = await initDatabases();
-  final  List<Map<String, Object?>> list=await db.rawQuery('SELECT * FROM todolist WHERE id =? ', [id]);
-    return list.map((e) => listclass.fromMap(e)).toList();
   }
 
 

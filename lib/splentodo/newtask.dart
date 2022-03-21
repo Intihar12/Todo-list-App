@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'listtododata.dart';
-import 'maiiin.dart';
+import '../main.dart';
 import 'modals/classtask.dart';
 import 'modals/database.dart';
 import 'modals/listclass.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 
 
@@ -29,16 +27,16 @@ class _newtaskState extends State<newtask> {
  // TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
 
   TextEditingController _timeController = TextEditingController();
-  late String _setTime;
+ // late String _setTime;
 
   String NewTasktexts = "";
 
   final listcontroller = TextEditingController();
-  Future<List<listclass>>? todoList;
+ // Future<List<listclass>>? todoList;
 
   String dropDownValue = "";
   final _formKey = GlobalKey<FormState>();
-  final focus = FocusNode();
+ // final focus = FocusNode();
   final inputController = TextEditingController();
   final datecontroller = TextEditingController();
   final timecontroller = TextEditingController();
@@ -184,12 +182,12 @@ class _newtaskState extends State<newtask> {
 
                                             FlutterAlarmClock.createAlarm(hour, minute);
 
-                                            print(selectedlistitems);
+                                            /*print(selectedlistitems);
                                             print("datetime intuuu $selectedDate");
                                             print("jkjkjk $_selectedTime");
                                             print("time of the day $selectedTime");
                                             print(inputController.text);
-                                            print(snapshot.data![index].id);
+                                            print(snapshot.data![index].id);*/
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>

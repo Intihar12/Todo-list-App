@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:sqflite_app/my_Todo/db/db_provider.dart';
 import 'package:sqflite_app/splentodo/newtask.dart';
 
-import 'modals/classtask.dart';
-import 'modals/database.dart';
-import 'modals/listclass.dart';
+import 'splentodo/modals/classtask.dart';
+import 'splentodo/modals/database.dart';
+import 'splentodo/modals/listclass.dart';
 
-void main(){runApp(mypage(),);}
+void main(){runApp(
+  MaterialApp(
+
+  home: mypage(),));}
 
 class mypage extends StatelessWidget {
   const mypage({Key? key, }) : super(key: key);
@@ -30,7 +32,6 @@ class intuuapp extends StatefulWidget {
   const intuuapp({Key? key,required  this.listtodo }) : super(key: key);
 
   final String listtodo;
- //final String listtodo;
   @override
   _intuuappState createState() => _intuuappState();
 }
@@ -38,22 +39,17 @@ class intuuapp extends StatefulWidget {
 class _intuuappState extends State<intuuapp> {
 
   final _formKey = GlobalKey<FormState>();
-  final focus = FocusNode();
-late  VoidCallback? press;
+ // final focus = FocusNode();
+//late  VoidCallback? press;
   TextEditingController inputcontroller= TextEditingController();
   Color maincolor = Color(0xFF0d0952);
   Color secondcolor = Color(0xFF212061);
   Color btncolor = Color(0xFFff955b);
   Color editcolor = Color(0xFF4044cc);
   String newTasktexts ="";
-  Database? database;
-
-//Future<List<Textclass>>? searchusers;
+ // Database? database;
 
 TodoHandlers? handler;
-
-  //databaseclasshandlar? handlers;
-
 
   Future<List<Textclass>>? searchusers;
 
@@ -62,16 +58,7 @@ TodoHandlers? handler;
   void _runFilter(String enteredKeyword) {
    //Future<List<Textclass>> results ;
    //List<Map<String, dynamic>> results = [];
-   /* if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all users
-      // results = handler!.getdata() as List<Map<String, dynamic>> ;
-    } else {
 
-      // results = handler!.getdata()
-      //     .then((seplando) =>
-      //     seplando.texts.toString().toLowerCase().contains(enteredKeyword.toLowerCase())) as List<Map<String, dynamic>>;
-      // we use the toLowerCase() method to make it case-insensitive
-    }*/
 
     // Refresh the UI
     setState(() {
@@ -107,7 +94,7 @@ print("back???");
 
   Icon actionIcon = new Icon(Icons.search);
   Widget appBarTitle = new Text("All List");
-  String dropdownValue = 'Delete';
+ // String dropdownValue = 'Delete';
 
   String listtodo = "";
 String texts = '';
@@ -131,12 +118,12 @@ backgroundColor: Colors.white,
         title:appBarTitle,
 
 
-        leading: IconButton(onPressed:(){
+       /* leading: IconButton(onPressed:(){
 
         },
           icon: Icon (Icons.done),
 
-        ),
+        ),*/
 
 
 
@@ -340,6 +327,8 @@ backgroundColor: Colors.white,
           ),
 
           Container(
+
+
             padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),
 
             decoration: BoxDecoration(
@@ -355,7 +344,10 @@ backgroundColor: Colors.white,
               key: _formKey,
               child: Row(
                 children: [
+
+
                   Expanded(
+
                     child: TextFormField(
 
                       textInputAction: TextInputAction.next,
@@ -374,9 +366,6 @@ backgroundColor: Colors.white,
 
     return null;
     },
-
-
-
                     ),),
                   SizedBox(width: 15.0,),
 
@@ -404,11 +393,6 @@ backgroundColor: Colors.white,
 
 
                        //Textclass newtaskst = Textclass(texts: newTasktexts, dateTime: DateTime.now() );
-
-
-
-
-
                        print("i am here ${newTasktexts}, ${DateTime.now()}");
                       },
 
